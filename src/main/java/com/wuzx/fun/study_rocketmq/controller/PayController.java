@@ -1,5 +1,6 @@
 package com.wuzx.fun.study_rocketmq.controller;
 
+import com.wuzx.fun.study_rocketmq.jms.JMSConfig;
 import com.wuzx.fun.study_rocketmq.jms.PayProducter;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -36,5 +37,13 @@ public class PayController {
             e.printStackTrace();
         }
         return sendResult;
+    }
+
+
+    @Autowired
+    private JMSConfig jmsConfig;
+    @RequestMapping("/api/testJmsConfig")
+    public Object testJmsConfig() {
+        return jmsConfig.toString();
     }
 }

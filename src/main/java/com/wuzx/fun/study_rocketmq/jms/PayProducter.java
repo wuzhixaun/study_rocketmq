@@ -5,6 +5,9 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.stereotype.Component;
 
+/**
+ * 生产者
+ */
 @Component
 public class PayProducter {
 
@@ -27,6 +30,8 @@ public class PayProducter {
 
         //设置nameServerAddr
         mqProducer.setNamesrvAddr(nameServerAddr);
+
+
 
 
         //每次使用对象都需要启动
