@@ -18,7 +18,7 @@ public class PayProducter {
     private String nameServerAddr = "120.78.81.89:9876";
 
 
-    //消费者对象
+    //生产者对象
     private DefaultMQProducer mqProducer;
 
 
@@ -30,8 +30,6 @@ public class PayProducter {
 
         //设置nameServerAddr
         mqProducer.setNamesrvAddr(nameServerAddr);
-
-
 
 
         //每次使用对象都需要启动
