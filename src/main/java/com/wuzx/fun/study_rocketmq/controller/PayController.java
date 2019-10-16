@@ -24,6 +24,7 @@ public class PayController {
     @RequestMapping("/api/producter")
     public Object callBack(String text) {
         Message message = new Message(topic, "pay_producter", ("wuzx" + text).getBytes());
+
         SendResult sendResult =null;
         try {
             sendResult = producter.getMqProducerInstance().send(message);
@@ -38,6 +39,10 @@ public class PayController {
         }
         return sendResult;
     }
+
+
+
+
 
 
     @Autowired
