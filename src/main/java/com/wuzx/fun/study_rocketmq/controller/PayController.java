@@ -6,6 +6,7 @@ import com.wuzx.fun.study_rocketmq.jms.PayProducter;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
@@ -30,7 +31,18 @@ public class PayController {
     public Object callBack(String text) {
         Message message = new Message(topic, "pay_producter", ("wuzx" + text).getBytes());
 
-        SendResult sendResult =null;
+
+        /**
+         * 设置延迟消息发送
+         *
+         * messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
+         *
+         * 0对应的就是第一个，以此类推
+         */
+        message.setDelayTimeLevel(4);//30秒后才可以消费消息
+
+
+        SendResult sendResult = null;
         try {
             sendResult = producter.getMqProducerInstance().send(message);
         } catch (MQClientException e) {
@@ -46,9 +58,47 @@ public class PayController {
     }
 
 
+    @RequestMapping(value = "/api/asyncproducter")
+    public Object asyncRroducerSendMessage(String mesBody) throws Exception {
+
+
+        Message message = new Message(topic, "producter_tag", "asyncproducter", ("asyncproducter" + mesBody).getBytes());
+//        producter.getMqProducerInstance().send(message, new SendCallback() {
+//            @Override
+//            public void onSuccess(SendResult sendResult) {
+//                System.out.println("消息发送成功");
+//            }
+//
+//            @Override
+//            public void onException(Throwable throwable) {
+//                System.out.println("异常");
+//                throwable.printStackTrace();
+//            }
+//        });
+
+
+         producter.getMqProducerInstance().send(message, (messageQueueList, message1, arg) ->
+                        messageQueueList.get((Integer) arg), "4",
+                new SendCallback() {
+                    @Override
+                    public void onSuccess(SendResult sendResult) {
+                        System.out.println("消息发送成功");
+                    }
+
+                    @Override
+                    public void onException(Throwable throwable) {
+                        System.out.println("出现异常了");
+//                throwable.printStackTrace();
+                    }
+                });
+
+        return null;
+    }
+
 
     @Autowired
     private JMSConfig jmsConfig;
+
     @RequestMapping("/api/testJmsConfig")
     public Object testJmsConfig() {
         return jmsConfig.toString();

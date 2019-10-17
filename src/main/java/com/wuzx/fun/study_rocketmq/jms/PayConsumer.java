@@ -1,17 +1,14 @@
 package com.wuzx.fun.study_rocketmq.jms;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 /**
  * Created by wuzhixuan on 19-10-13.
@@ -63,6 +60,6 @@ public class PayConsumer {
         });
 
         mqPushConsumer.start();
-
+        System.out.println("-------------------消费者启动--------------");
     }
 }
