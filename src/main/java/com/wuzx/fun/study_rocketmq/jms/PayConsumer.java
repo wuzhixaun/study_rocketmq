@@ -36,7 +36,7 @@ public class PayConsumer {
         mqPushConsumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 
         //设置订阅主题
-        mqPushConsumer.subscribe(topic, "*");
+        mqPushConsumer.subscribe("tran"+topic, "*");
         //设置监听器
         mqPushConsumer.setMessageListener((MessageListenerConcurrently) (messageExtList, consumeConcurrentlyContext) -> {
 

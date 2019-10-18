@@ -3,11 +3,10 @@ package com.wuzx.fun.study_rocketmq.controller;
 import com.wuzx.fun.study_rocketmq.domain.ProductOrder;
 import com.wuzx.fun.study_rocketmq.jms.JMSConfig;
 import com.wuzx.fun.study_rocketmq.jms.PayProducter;
+import com.wuzx.fun.study_rocketmq.jms.TransactionProducer;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.SendCallback;
-import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +134,21 @@ public class PayController {
 
         return sendResults;
 
+    }
+
+    @Autowired
+    private TransactionProducer transactionProducer;
+
+    @RequestMapping(value = "/api/sendTranscationMSG")
+    public Object sendTranscationMSG(String tag, String otherparm) throws MQClientException {
+
+        Message message = new Message("tran"+topic,tag,tag+"key",tag.getBytes());
 
 
+
+        TransactionMQProducer transactionMQProducer = transactionProducer.getInstance();
+        TransactionSendResult transactionSendResult = transactionMQProducer.sendMessageInTransaction(message, otherparm);
+
+        return transactionSendResult;
     }
 }
